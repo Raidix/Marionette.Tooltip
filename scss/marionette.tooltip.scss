@@ -1,0 +1,88 @@
+@import "settings";
+
+@mixin tooltip-arrow ($direction, $width, $color) {
+    @if $direction == "top" {
+        border-width: $width $width 0;
+        margin-left: -$width;
+        border-top-color: $color;
+        top: 100%;
+        left: 50%;
+    }
+    @else if $direction == "bottom" {
+        border-width: 0 $width $width;
+        margin-left: -$width;
+        border-bottom-color: $color;
+        bottom: 100%;
+        left: 50%;
+    }
+    @else if $direction == "left" {
+        border-width: $width 0 $width $width;
+        margin-top: -$width;
+        border-left-color: $color;
+        left: 100%;
+        top: 50%;
+    }
+    @else if $direction == "right" {
+        border-width: $width $width $width 0;
+        margin-top: -$width;
+        border-right-color: $color;
+        right: 100%;
+        top: 50%;
+    }
+}
+
+@mixin tooltip-arrows ($direction, $width, $border-color, $background-color) {
+    &::before {
+        @include tooltip-arrow($direction, $width, $border-color);
+    }
+
+    &::after {
+        @include tooltip-arrow($direction, $width - 1, $background-color);
+    }
+}
+
+@mixin tooltip ($background-color: $tooltip-background-color, $border-color: $tooltip-border-color, $width: 10px) {
+    text-align: center;
+    min-width: 100px;
+    padding: 5px;
+    display: none;
+    position: absolute;
+    z-index: 1488;
+    background: $background-color;
+    border: 1px solid $border-color;
+
+    &::before,
+    &::after {
+        content: " ";
+        position: absolute;
+        width: 0;
+        height: 0;
+        border: solid transparent;
+    }
+
+    &.direction {
+        &-top {
+            margin-top: -$width;
+
+            @include tooltip-arrows ("top", $width, $border-color, $background-color);
+        }
+
+        &-bottom {
+            margin-top: $width;
+
+            @include tooltip-arrows ("bottom", $width, $border-color, $background-color);
+        }
+
+        &-left {
+            margin-left: -$width;
+
+            @include tooltip-arrows ("left", $width, $border-color, $background-color);
+        }
+
+        &-right {
+            margin-left: $width;
+
+            @include tooltip-arrows ("right", $width, $border-color, $background-color);
+        }
+    }
+}
