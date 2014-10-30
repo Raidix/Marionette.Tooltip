@@ -10,12 +10,31 @@
 }(this, function (Marionette, _) {
     'use strict';
 
-    var Container = Marionette.LayoutView.extend({
+    var ContainerView = Marionette.LayoutView.extend({
         template: _.template('<div class="js-tooltip"></div>'),
         className: 'tooltip',
 
         regions: {
             region: '.js-tooltip'
+        },
+
+        events: {},
+
+        initialize: function () {
+            var prevents = this.prevents;
+
+            if (_.isString(prevents)) {
+                this.events[prevents] = 'preventPropagation';
+            }
+            else if (_.isArray(prevents)) {
+                _.each(prevents, function (event) {
+                    this.events[event] = 'preventPropagation';
+                }, this);
+            }
+        },
+
+        preventPropagation: function (event) {
+            event.stopPropagation();
         }
     });
 
@@ -24,10 +43,27 @@
             direction: 'top'
         },
 
+        initialize: function () {
+            var Container = ContainerView.extend({
+                className: this.options.className || 'tooltip',
+                prevents: this.options.prevents
+            });
+
+            this.tooltip = new Container;
+        },
+
         onShow: function () {
-            this.tooltip = new Container({ className: this.options.className || 'tooltip' });
+            var View = _.result(this.view, 'getTooltip');
+
+            if (View === void 0) {
+                throw new Marionette.Error({
+                    name: 'TooltipException',
+                    message: 'tooltip is not defined'
+                });
+            }
+
             this.tooltip.render();
-            this.tooltip.region.show(new this.options.View);
+            this.tooltip.region.show(new View);
 
             this.tooltip.$el.addClass('direction-' + this.options.direction);
             this.el.insertBefore(this.tooltip.el, null);
