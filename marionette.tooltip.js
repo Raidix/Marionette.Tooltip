@@ -124,11 +124,11 @@
 
         onShowTooltip: function () {
             this.setPosition();
-            this.tooltip.$el.fadeIn(200);
+            this.tooltip.$el.stop(true).fadeIn(200);
         },
 
         onHideTooltip: function () {
-            this.tooltip.$el.fadeOut(200);
+            this.tooltip.$el.stop(true).fadeOut(200);
         },
 
         onToggleTooltip: function () {
