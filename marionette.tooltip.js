@@ -66,7 +66,13 @@
             this.tooltip.region.show(new View);
 
             this.tooltip.$el.addClass('direction-' + this.options.direction);
-            this.el.insertBefore(this.tooltip.el, null);
+
+            if (this.view.ui && this.view.ui.tooltipTarget !== void 0) {
+                this.view.ui.tooltipTarget.after(this.tooltip.el);
+            }
+            else {
+                this.el.insertBefore(this.tooltip.el, null);
+            }
         },
 
         onDestroy: function () {
