@@ -1,8 +1,14 @@
 (function (root, factory) {
-    'use strict';
-
     if (typeof define === 'function' && define.amd) {
-        define(['marionette', 'underscore'], factory);
+        define(['marionette', 'underscore'], function (Marionette, _) {
+            return factory(Marionette, _);
+        });
+    }
+    else if (typeof exports !== 'undefined') {
+        var Marionette = require('marionette');
+        var _ = require('underscore');
+        
+        module.exports = factory(Marionette, _);
     }
     else {
         root.Marionette.Tooltip = factory(root.Marionette, root._);
