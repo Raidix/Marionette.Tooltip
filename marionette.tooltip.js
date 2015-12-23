@@ -1,5 +1,4 @@
 (function (root, factory) {
-
     if (typeof define === 'function' && define.amd) {
         define(['marionette', 'underscore'], function (Marionette, _) {
             return factory(Marionette, _);
@@ -8,6 +7,7 @@
     else if (typeof exports !== 'undefined') {
         var Marionette = require('marionette');
         var _ = require('underscore');
+        
         module.exports = factory(Marionette, _);
     }
     else {
